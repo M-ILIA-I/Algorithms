@@ -1,34 +1,28 @@
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        
+        """
+        Problem description:
+
+        Given a string s, find the length of the longest substring without repeating characters.
+        """
         n = len(s)
         if n <= 1:
             return n
 
-        slow = 0
-        fast = 0
-        hs = {}
-        res = 1
-        while fast < n:
-            if s[fast] in hs:
-                res=max(res, fast-slow)
-                slow = hs[s[fast]]+1
-                if s[slow] == s[fast]:
-                    slow = fast
-                    hs[s[slow]] = slow
-                else:
-                    hs[s[fast]] = fast
-                    fast+=1
-                    
+        max_length, left = 0, 0
+        cm = {}
+
+        for right in range(n):
+            if s[right] not in cm or cm[s[right]] < left:
+                cm[s[right]] = right
+                max_length = max(max_length, right-left+1)
             else:
-                hs[s[fast]] = fast
-                fast+=1
-                
-                
+                left = cm[s[right]] + 1
+                cm[s[right]] = right
         
-        return max(res, n-slow-1)
+        return max_length
 
 if __name__ == "__main__":
     c =Solution()
-
-    print(c.lengthOfLongestSubstring("aabaab!bb"))
+    
+    print(c.lengthOfLongestSubstring("ggububgvfk"))
